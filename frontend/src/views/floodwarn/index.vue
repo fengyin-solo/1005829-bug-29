@@ -43,7 +43,13 @@
       </thead>
       <tbody>
         <tr v-for="row in rows" :key="String(row.id)">
-          <td v-for="column in columns" :key="column">{{ row[column] ?? '—' }}</td>
+          <td v-for="column in columns" :key="column">
+            {{ row[column] === '' || row[column] === undefined || row[column] === null ? '—' : row[column] }}
+            <span
+              v-if="column === '预警级别' && row['自动生成'] && row.status === '待拟稿'"
+              class="tag-auto"
+            >水位超限自动落入</span>
+          </td>
           <td>{{ row.status }}</td>
           <td class="row-actions">
             <button
@@ -135,3 +141,16 @@ function reload() {
 
 onMounted(reload)
 </script>
+
+<style scoped>
+.tag-auto {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 11px;
+  color: #b42318;
+  background: #fee4e2;
+  border-radius: 999px;
+  padding: 0 8px;
+  line-height: 18px;
+}
+</style>
